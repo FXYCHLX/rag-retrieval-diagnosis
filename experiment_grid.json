@@ -1,0 +1,132 @@
+{
+ "grid": [
+  {
+   "alpha": 0.2,
+   "w_head": 0.1,
+   "recall@1": 0.3333,
+   "recall@3": 0.5238,
+   "recall@5": 0.619,
+   "mrr": 0.4476
+  },
+  {
+   "alpha": 0.2,
+   "w_head": 0.2,
+   "recall@1": 0.3333,
+   "recall@3": 0.5238,
+   "recall@5": 0.619,
+   "mrr": 0.4476
+  },
+  {
+   "alpha": 0.2,
+   "w_head": 0.3,
+   "recall@1": 0.3333,
+   "recall@3": 0.5238,
+   "recall@5": 0.619,
+   "mrr": 0.45
+  },
+  {
+   "alpha": 0.4,
+   "w_head": 0.1,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.619,
+   "mrr": 0.4857
+  },
+  {
+   "alpha": 0.4,
+   "w_head": 0.2,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.619,
+   "mrr": 0.4857
+  },
+  {
+   "alpha": 0.4,
+   "w_head": 0.3,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4683
+  },
+  {
+   "alpha": 0.5,
+   "w_head": 0.1,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.619,
+   "mrr": 0.4857
+  },
+  {
+   "alpha": 0.5,
+   "w_head": 0.2,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4762
+  },
+  {
+   "alpha": 0.5,
+   "w_head": 0.3,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4762
+  },
+  {
+   "alpha": 0.6,
+   "w_head": 0.1,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4762
+  },
+  {
+   "alpha": 0.6,
+   "w_head": 0.2,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4762
+  },
+  {
+   "alpha": 0.6,
+   "w_head": 0.3,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4762
+  },
+  {
+   "alpha": 0.8,
+   "w_head": 0.1,
+   "recall@1": 0.3333,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4444
+  },
+  {
+   "alpha": 0.8,
+   "w_head": 0.2,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4762
+  },
+  {
+   "alpha": 0.8,
+   "w_head": 0.3,
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4762
+  }
+ ],
+ "best": {
+  "alpha": 0.4,
+  "w_head": 0.1,
+  "recall@1": 0.381,
+  "recall@3": 0.5714,
+  "recall@5": 0.619,
+  "mrr": 0.4857
+ }
+}

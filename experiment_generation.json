@@ -1,0 +1,515 @@
+{
+ "summary": {
+  "n": 21,
+  "baseline_correct": 0.7619,
+  "rag_correct": 0.6667,
+  "baseline_notfound": 0.0,
+  "rag_notfound": 0.2381
+ },
+ "rows": [
+  {
+   "question": "How can I change the HTTP port the embedded server listens on?",
+   "answer_key": "server.port",
+   "baseline_answer": "Set the `server.port` property. Spring Boot's `ServerProperties` binds it, and the embedded container (Tomcat, Jetty, Undertow, Netty) picks it up.\n\n**application.properties**\n```properties\nserver.port=9090\n```\n\n**application.yml**\n```yaml\nserver:\n  port: 9090\n```\n\nOther ways to set the same property:\n\n- **Command line:** `java -jar app.jar --server.port=9090`\n- **Env var:** `SERVER_PORT=9090`\n- **JVM system property:** `-Dserver.port=9090`\n\nNotes:\n\n- `server.port=0` makes the server bind a random free port. You can read the actual port at runtime by injecting `@LocalServerPort` (test scope) or via `WebServerApplicationContext.getWebServer().getPort()`. For a servlet app under `@SpringBootTest(webEnvironment = RANDOM_PORT)`, `@LocalServerPort` resolves it.\n- For programmatic control, register a `WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>` (or the reactive equivalent) and call `factory.setPort(...)`.\n- The property prefix is `server.port` for the standard single-connection setup. If you're using additional connectors (e.g. a second Tomcat connector via `TomcatConnectorCustomizer`), those are configured separately.\n- `management.server.port` is the equivalent for the Actuator endpoints if you want them on a different port.",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "Set it with the `server.port` property (for example, in `application.properties` or as a System property). You can also use `SERVER_PORT` as an OS environment variable. To switch off the HTTP endpoints completely, use `server.port=-1`.",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Reactive Web Applications > Embedded Reactive Server Support",
+     "text": "Spring Boot includes support for the following embedded reactive web servers: Reactor Netty, Tomcat, and Jetty. Most developers use the appropriate starter to obtain a fully configured instance. By de"
+    },
+    {
+     "heading": "Servlet Web Applications > Embedded Servlet Container Support",
+     "text": "For servlet application, Spring Boot includes support for embedded Tomcat and Jetty servers. Most developers use the appropriate starter to obtain a fully configured instance. By default, the embedded"
+    },
+    {
+     "heading": "Embedded Web Servers > Change the HTTP Port",
+     "text": "In a standalone application, the main HTTP port defaults to 8080 but can be set with server.port (for example, in application.properties or as a System property). Thanks to relaxed binding of Environm"
+    }
+   ]
+  },
+  {
+   "question": "Which annotation marks the main class of a Spring Boot application?",
+   "answer_key": "@SpringBootApplication",
+   "baseline_answer": "`@SpringBootApplication` — it's placed on the main class and combines `@SpringBootConfiguration` (a specialized `@Configuration`), `@EnableAutoConfiguration`, and `@ComponentScan`.\n\nTypical usage:\n\n```java\n@SpringBootApplication\npublic class MyApplication {\n    public static void main(String[] args) {\n        SpringApplication.run(MyApplication.class, args);\n    }\n}\n```",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "`@SpringBootApplication` — excerpt [2] states: \"The @SpringBootApplication annotation is often placed on your main class,\" and excerpt [3] notes it is \"Same as @SpringBootConfiguration @EnableAutoConfiguration @ComponentScan\".",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Using the @SpringBootApplication Annotation",
+     "text": "None of these features are mandatory and you may choose to replace this single annotation by any of the features that it enables. For instance, you may not want to use component scan or configuration "
+    },
+    {
+     "heading": "Structuring Your Code > Locating the Main Application Class",
+     "text": "We generally recommend that you locate your main application class in a root package above other classes. The @SpringBootApplication annotation is often placed on your main class, and it implicitly de"
+    },
+    {
+     "heading": "Using the @SpringBootApplication Annotation",
+     "text": "Many Spring Boot developers like their apps to use auto-configuration, component scan and be able to define extra configuration on their \"application class\". A single @SpringBootApplication annotation"
+    }
+   ]
+  },
+  {
+   "question": "How do I exclude a specific auto-configuration class from being applied?",
+   "answer_key": "spring.autoconfigure.exclude",
+   "baseline_answer": "Use the `exclude` attribute on `@SpringBootApplication` (or `@EnableAutoConfiguration`):\n\n```java\n@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)\npublic class MyApplication {\n    public static void main(String[] args) {\n        SpringApplication.run(MyApplication.class, args);\n    }\n}\n```\n\nIf the class may not be on the classpath, use `excludeName` with the fully qualified class name instead:\n\n```java\n@SpringBootApplication(excludeName = \"org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration\")\n```\n\nOr exclude it via configuration property — `application.properties`:\n\n```properties\nspring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration\n```\n\n`application.yml`:\n\n```yaml\nspring:\n  autoconfigure:\n    exclude:\n      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration\n```\n\nA few notes:\n- Both `spring.autoconfigure.exclude` and the annotation attributes work; if you set both, the annotation and property are effectively combined (the property is also useful for tests via `@SpringBootTest(properties = ...)`).\n- To see what's actually applied, run with `--debug` or set `debug=true`; the \"auto-configuration report\" lists matched/unmatched configurations and why.\n- To exclude many classes by pattern (e.g. all of a package), you can't do it with `exclude`/`excludeName` alone — use",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "Use the `exclude` attribute of `@SpringBootApplication` (or `@EnableAutoConfiguration`), for example:\n\n`@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class })`\n\nIf the class is not on the classpath, use the `excludeName` attribute and specify the fully qualified name instead.\n\nYou can also use the `spring.autoconfigure.exclude` property. Exclusions can be defined both at the annotation level and by using the property.",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Auto-configuration > Disabling Specific Auto-configuration Classes",
+     "text": "If you find that specific auto-configuration classes that you do not want are being applied, you can use the exclude attribute of @SpringBootApplication to disable them, as shown in the following exam"
+    },
+    {
+     "heading": "Creating Your Own Auto-configuration > Locating Auto-configuration Candidates",
+     "text": "Spring Boot checks for the presence of a META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports file within your published jar. The file should list your configuration classe"
+    },
+    {
+     "heading": "Auto-configuration > Gradually Replacing Auto-configuration",
+     "text": "Auto-configuration is non-invasive. At any point, you can start to define your own configuration to replace specific parts of the auto-configuration. For example, if you add your own DataSource bean, "
+    }
+   ]
+  },
+  {
+   "question": "How do I change the logging level of a single logger?",
+   "answer_key": "logging.level",
+   "baseline_answer": "Use the `logging.level.<logger-name>` property, where `<logger-name>` is the logger name (usually the package or fully-qualified class name), not the class file.\n\n**application.properties**\n```properties\nlogging.level.root=WARN\nlogging.level.com.example=DEBUG\nlogging.level.com.example.web.MyController=TRACE\n```\n\n**application.yml**\n```yaml\nlogging:\n  level:\n    root: WARN\n    com.example: DEBUG\n    com.example.web.MyController: TRACE\n```\n\nNotes:\n- Spring Boot applies these levels after loading your Logback/Log4j2 config file, so they override levels set in `logback-spring.xml` for that logger.\n- Values are case-insensitive (`DEBUG`, `debug`, `Debug` all work).\n- Changing the level at runtime requires Actuator: expose the `loggers",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "Use the `logging.level.<logger-name>=<level>` property in the Spring Environment (for example, in `application.properties`), where `<level>` is one of `TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`, or `OFF`. For example: `logging.level.org.springframework.web=debug`.",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Logging > Log Groups",
+     "text": "It is often useful to be able to group related loggers together so that they can all be configured at the same time. For example, you might commonly change the logging levels for all Tomcat related lo"
+    },
+    {
+     "heading": "Logging > Log Levels",
+     "text": "All the supported logging systems can have the logger levels set in the Spring Environment (for example, in application.properties ) by using logging.level.<logger-name>=<level> where level is one of "
+    },
+    {
+     "heading": "Loggers",
+     "text": "Spring Boot Actuator includes the ability to view and configure the log levels of your application at runtime. You can view either the entire list or an individual logger’s configuration, which is mad"
+    }
+   ]
+  },
+  {
+   "question": "Which property sets the name of the application used in metrics and logs?",
+   "answer_key": "spring.application.name",
+   "baseline_answer": "`spring.application.name`\n\nSet it in `application.properties`:\n\n```properties\nspring.application.name=my-service\n```\n\nNotes:\n- Metrics: Micrometer registers it as the `application` common tag on all meters (e.g. `http_server_requests_seconds{application=\"my-service\", ...}`), and tracing uses it as the service name.\n- Logs: it's the value used by `logging.include-application-name` (default `true` since Spring Boot 3.4), which puts the app name in the default",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "NOT_FOUND",
+   "rag_correct": false,
+   "rag_notfound": true,
+   "retrieved": [
+    {
+     "heading": "Metrics > Supported Monitoring Systems > Dynatrace > Version-independent Settings",
+     "text": "In addition to the API endpoint and token, you can also change the interval at which metrics are sent to Dynatrace. The default export interval is 60s . The following example sets the export interval "
+    },
+    {
+     "heading": "Metrics > Supported Metrics and Meters > Application Startup Metrics",
+     "text": "Auto-configuration exposes application startup time metrics: application.started.time : time taken to start the application. application.ready.time : time taken for the application to be ready to serv"
+    },
+    {
+     "heading": "Metrics > Supported Monitoring Systems > Dynatrace > v2 API",
+     "text": "[code] management.dynatrace.metrics.export.uri=https://example.live.dynatrace.com/api/v2/metrics/ingest management.dynatrace.metrics.export.api-token=YOUR_TOKEN [code] management:  dynatrace:  metrics"
+    }
+   ]
+  },
+  {
+   "question": "How do I activate a configuration profile?",
+   "answer_key": "spring.profiles.active",
+   "baseline_answer": "**Set the `spring.profiles.active` property** — that's the main switch. Where you set it determines precedence (later overrides earlier):\n\n| Method | Example |\n|---|---|\n| Command line | `java -jar app.jar --spring.profiles.active=prod,metrics` |\n| Environment variable | `SPRING_PROFILES_ACTIVE=prod` |\n| JVM system property | `-Dspring.profiles.active=prod` |\n| `application.properties`/`.yml` | `spring.profiles.active=prod` |\n| Programmatically | `SpringApplication.setAdditionalProfiles(\"prod\")` or `applicationContext.getEnvironment().setActiveProfiles(\"prod\")` |\n| Tests | `@ActiveProfiles(\"prod\")` |\n\nNotes:\n\n- Values are comma‑separated: `spring.profiles.active=prod,us-east`.\n- Profiles can be **grouped** (Spring Boot 2.4+): `spring.profiles.group.prod=proddb,prodmq` — activating `prod` also activates `proddb` and `prodmq`.\n- To activate a profile *in addition to* the default, use `spring.profiles.include` (this property is only allowed in non‑profile‑specific documents).\n- Since Boot 2.4, `spring.profiles.active` **cannot**",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "Use the `spring.profiles.active` property. Per the excerpts, you can specify it on the command line with the switch `--spring.profiles.active=dev,hsqldb`. It can also be set in `application.properties` (and later replaced by the command-line switch, since the highest `PropertySource` wins). Note that `spring.profiles.active` can only be used in non-profile-specific documents — it cannot be included in profile-specific files or documents activated by `spring.config.activate.on-profile`.",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Externalized Configuration > External Application Properties > Activation Properties",
+     "text": "It is sometimes useful to only activate a given set of properties when certain conditions are met. For example, you might have properties that are only relevant when a specific profile is active. You "
+    },
+    {
+     "heading": "Properties and Configuration > Change Configuration Depending on the Environment",
+     "text": "Spring Boot supports multi-document YAML and Properties files (see Working With Multi-Document Files for details) which can be activated conditionally based on the active profiles. If a document conta"
+    },
+    {
+     "heading": "Profiles",
+     "text": "You could also specify it on the command line by using the following switch: --spring.profiles.active=dev,hsqldb . If no profile is active, a default profile is enabled. The name of the default profil"
+    }
+   ]
+  },
+  {
+   "question": "How do I enable detailed health information in the Actuator health endpoint?",
+   "answer_key": "management.endpoint.health.show-details",
+   "baseline_answer": "Set the following property:\n\n```properties\nmanagement.endpoint.health.show-details=always\n```\n\nOther accepted values:\n\n- `never` — default; no details shown to anyone\n- `when-authorized` — details shown only to authenticated users with the roles listed in `management.endpoint.health.roles`\n- `always` — details shown to all callers\n\nIf you use `when-authorized`, specify the allowed roles, e.g.:\n\n```properties\nmanagement.endpoint.health.show-details=when-authorized\nmanagement.endpoint.health.roles=ADMIN\n```\n\nOptionally, to include per-component details (each `HealthIndicator` individually):\n\n```properties\nmanagement.endpoint.health.show-components=always\n```\n\nNote that `show-components` governs component visibility while `show-details` governs the details inside each component; the effective visibility is the narrower of the two, so with `show-details=always` and `show-components=never` you still get aggregate details.\n\nAlso make sure the endpoint is exposed:\n\n```properties\nmanagement.endpoints.web.exposure.include=health\n```\n\n(Or include it in your existing list.) The result is visible at `/actuator/health`.\n\nHow much detail you get also depends on each `HealthIndicator` — e.g. `management.info.env.enabled` and the `management.health.*.enabled` flags control which indicators contribute at all.",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "",
+   "rag_correct": false,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Endpoints > Kubernetes Probes",
+     "text": "Applications deployed on Kubernetes can provide information about their internal state with Container Probes . Depending on your Kubernetes configuration , the kubelet calls those probes and reacts to"
+    },
+    {
+     "heading": "Endpoints > Health Information > Health Groups",
+     "text": "It is sometimes useful to organize health indicators into groups that you can use for different purposes. To create a health indicator group, you can use the management.endpoint.health.group.<name> pr"
+    },
+    {
+     "heading": "Endpoints",
+     "text": "Actuator endpoints let you monitor and interact with your application. Spring Boot includes a number of built-in endpoints and lets you add your own. For example, the health endpoint provides basic ap"
+    }
+   ]
+  },
+  {
+   "question": "Which Actuator endpoint exposes application metrics?",
+   "answer_key": "/actuator/metrics",
+   "baseline_answer": "**`/actuator/metrics`** — it exposes the metrics collected by Micrometer.\n\nNotes:\n\n- It must be exposed. By default, only `health` is exposed over HTTP (WebFlux/WebMvc), so you typically need:\n  ```properties\n  management.endpoints.web.exposure.include=health,metrics\n  ```\n  (In Spring Boot 3.x, `health` is the only one enabled/exposed by default; all others must be explicitly exposed.)\n- You can list all metric names with `GET /actuator/metrics`, and inspect a specific one with `GET /actuator/metrics/{name}`, e.g. `/actuator/metrics/jvm.memory.used`. Tag filtering is done via query params, e.g. `/actuator/metrics/http.server.requests?tag=status:200`.\n- If you need a Prometheus-scrapeable format, add the `micrometer-registry-prometheus` dependency, which exposes **`/actuator/prometheus`** instead (often used alongside `/actuator/metrics`).\n\nProperty names to double-check in your version: the exposure include property is `management.endpoints.web.exposure.include`; the base path is `management.endpoints.web.base-path` (default `/actuator`).",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "The **metrics** endpoint, available at `/actuator/metrics`. It is not available by default and must be exposed.",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Metrics > Metrics Endpoint",
+     "text": "Spring Boot provides a metrics endpoint that you can use diagnostically to examine the metrics collected by an application. The endpoint is not available by default and must be exposed. See exposing e"
+    },
+    {
+     "heading": "Endpoints > Software Bill of Materials (SBOM)",
+     "text": "The sbom endpoint exposes the Software Bill of Materials . CycloneDX SBOMs can be auto-detected, but other formats can be manually configured, too. The sbom actuator endpoint will then expose an SBOM "
+    },
+    {
+     "heading": "Metrics > Supported Metrics and Meters > Application Startup Metrics",
+     "text": "Auto-configuration exposes application startup time metrics: application.started.time : time taken to start the application. application.ready.time : time taken for the application to be ready to serv"
+    }
+   ]
+  },
+  {
+   "question": "How do I configure the JDBC connection URL for the default data source?",
+   "answer_key": "spring.datasource.url",
+   "baseline_answer": "Set `spring.datasource.url` in your configuration. For example, in `application.properties`:\n\n```properties\nspring.datasource.url=jdbc:postgresql://localhost:5432/mydb\nspring.datasource.username=myuser\nspring.datasource.password=mypass\n```\n\nOr in `application.yml`:\n\n```yaml\nspring:\n  datasource:\n    url: jdbc:postgresql://localhost:5432/mydb\n    username: myuser\n    password: mypass\n```\n\nNotes:\n\n- `spring.datasource.url` is the canonical property name. (The older `spring.datasource.jdbc-url` is **not** read by auto-configuration for the default data source — it's used in some manual/`DataSourceProperties`-based setups.)\n- Spring Boot auto-configures a `DataSource` bean from these properties; the driver is inferred from the URL, so `spring.datasource.driver-class-name` is usually optional (set it if you have multiple drivers on the classpath).\n- If you're using an embedded database (H2, HSQLDB, Derby) on the classpath, Spring Boot creates an in-memory datasource automatically without any URL — your `spring.datasource.url` overrides that.\n- Spring Boot 2.x+ uses HikariCP by default; connection-pool tuning goes under `spring.datasource.hikari.*`.\n- For multiple data sources, auto-configuration doesn't apply the same way —",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "Set `spring.datasource.url` (for example, `spring.datasource.url=jdbc:mysql://localhost/first`).",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Data Access > Configure a Custom DataSource",
+     "text": "To run an app with that DataSource , all you need is the connection information. Pool-specific settings can also be provided. Check the implementation that is going to be used at runtime for more deta"
+    },
+    {
+     "heading": "Data Access > Configure a Custom DataSource",
+     "text": "To configure your own DataSource , define a @Bean of that type in your configuration. Spring Boot reuses your DataSource anywhere one is required, including database initialization. If you need to ext"
+    },
+    {
+     "heading": "Data Access > Configure Two DataSources",
+     "text": "[code] import com.zaxxer.hikari.HikariDataSource import org.springframework.beans.factory.annotation.Qualifier import org.springframework.boot.context.properties.ConfigurationProperties import org.spr"
+    }
+   ]
+  },
+  {
+   "question": "How do I set the maximum pool size of the default HikariCP connection pool?",
+   "answer_key": "maximum-pool-size",
+   "baseline_answer": "Use the Hikari-specific datasource property:\n\n```properties\nspring.datasource.hikari.maximum-pool-size=20\n```\n\nOr in YAML:\n\n```yaml\nspring:\n  datasource:\n    hikari:\n      maximum-pool-size: 20\n```\n\nNotes:\n- This works when HikariCP is the pool in use (it is the default when `spring-boot-starter-jdbc`/`spring-boot-starter-data-jpa` is on the classpath and no other pool is configured).\n- The default is 10.\n- Other tuning knobs live under the same prefix, e.g. `spring.datasource.hikari.minimum-idle`, `connection-timeout`, `idle-timeout`, `max-lifetime`.\n- If you build the `DataSource` yourself with `@Bean`, Spring Boot's properties are not applied — you'd set `maximumPoolSize` on the `HikariConfig`/`HikariDataSource` directly.",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "NOT_FOUND",
+   "rag_correct": false,
+   "rag_notfound": true,
+   "retrieved": [
+    {
+     "heading": "Metrics > Supported Metrics and Meters > MongoDB Metrics > MongoDB Connection Pool Metrics",
+     "text": "Auto-configuration registers a MongoMetricsConnectionPoolListener with the auto-configured MongoClient . The following gauge metrics are created for the connection pool: mongodb.driver.pool.size repor"
+    },
+    {
+     "heading": "SQL Databases > Configure a DataSource > Supported Connection Pools",
+     "text": "Spring Boot uses the following algorithm for choosing a specific implementation: We prefer HikariCP for its performance and concurrency. If HikariCP is available, we always choose it. Otherwise, if th"
+    },
+    {
+     "heading": "SQL Databases > Configure a DataSource > DataSource Configuration",
+     "text": "For instance, if you use the Tomcat connection pool , you could customize many additional settings, as shown in the following example: [code] spring.datasource.tomcat.max-wait=10000 spring.datasource."
+    }
+   ]
+  },
+  {
+   "question": "Which annotation registers a bean only when a property has a given value?",
+   "answer_key": "@ConditionalOnProperty",
+   "baseline_answer": "`@ConditionalOnProperty` — it's a Spring Boot conditional annotation (from `org.springframework.boot.autoconfigure.condition`) that registers a bean only if the specified property is present and/or matches the expected value.\n\n```java\n@Bean\n@ConditionalOnProperty(name = \"my.feature.enabled\", havingValue = \"true\")\npublic MyService myService() {\n    return new MyService();\n}\n```\n\nKey attributes:\n\n- `name` / `value` — the property key(s) to check (aliases for each other).\n- `havingValue` — the value the property must equal for the condition to match. If omitted, the condition matches as long as the property exists and isn't `false`.\n- `matchIfMissing` — defaults to `false`; set to `true` to also register the bean when the property is absent entirely.\n- `prefix` — a convenience for prepending a prefix to the name(s).\n\nIt works on `@Bean` methods and on `@Configuration`/component classes alike.",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "@ConditionalOnProperty",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Creating Your Own Auto-configuration > Condition Annotations > Property Conditions",
+     "text": "The @ConditionalOnProperty annotation lets configuration be included based on a Spring Environment property. Use the prefix and name attributes to specify the property that should be checked. By defau"
+    },
+    {
+     "heading": "Externalized Configuration > Type-safe Configuration Properties",
+     "text": "Using the @Value(\"${property}\") annotation to inject configuration properties can sometimes be cumbersome, especially if you are working with multiple properties or your data is hierarchical in nature"
+    },
+    {
+     "heading": "Externalized Configuration > Type-safe Configuration Properties > @ConfigurationProperties vs. @Value",
+     "text": "The @Value annotation is a core container feature, and it does not provide the same features as type-safe configuration properties. The following table summarizes the features that are supported by @C"
+    }
+   ]
+  },
+  {
+   "question": "How do I enable graceful shutdown of the web server?",
+   "answer_key": "server.shutdown",
+   "baseline_answer": "",
+   "baseline_correct": false,
+   "baseline_notfound": false,
+   "rag_answer": "Graceful shutdown is enabled by default with all three embedded web servers (Jetty, Reactor Netty, and Tomcat) and with both reactive and servlet-based web applications. To configure the timeout period, use `spring.lifecycle.timeout-per-shutdown-phase`.",
+   "rag_correct": false,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Graceful Shutdown > Disabling Graceful Shutdown",
+     "text": "To disable graceful shutdown, configure the server.shutdown property, as shown in the following example: [code] server.shutdown=immediate [code] server:  shutdown: \"immediate\""
+    },
+    {
+     "heading": "Graceful Shutdown > Rejecting Requests During the Grace Period",
+     "text": "The exact way in which new requests are not permitted varies depending on the web server that is being used. Implementations may stop accepting requests at the network layer, or they may return a resp"
+    },
+    {
+     "heading": "Graceful Shutdown",
+     "text": "Graceful shutdown is enabled by default with all three embedded web servers (Jetty, Reactor Netty, and Tomcat) and with both reactive and servlet-based web applications. It occurs as part of closing t"
+    }
+   ]
+  },
+  {
+   "question": "How do I change the context path of the embedded servlet container?",
+   "answer_key": "server.servlet.context-path",
+   "baseline_answer": "**Property (application.properties / application.yml)**\n\n```properties\nserver.servlet.context-path=/myapp\n```\n\n```yaml\nserver:\n  servlet:\n    context-path: /myapp\n```\n\nVersion notes:\n- Spring Boot 2.x and 3.x: `server.servlet.context-path`\n- Spring Boot 1.x: `server.context-path` (no `servlet` segment)\n\n**Command line / env var**\n\n```\njava -jar app.jar --server.servlet.context-path=/myapp\nSERVER_SERVLET_CONTEXT_PATH=/myapp\n```\n\n**Programmatically**\n\n```java\n@Bean\nWebServerFactoryCustomizer<ConfigurableServletWebServerFactory> contextPathCustomizer() {\n    return factory -> factory.setContextPath(\"/myapp\");\n}\n```\n\n**Caveats**\n- This property applies to",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "NOT_FOUND",
+   "rag_correct": false,
+   "rag_notfound": true,
+   "retrieved": [
+    {
+     "heading": "Servlet Web Applications > Embedded Servlet Container Support > Servlet Context Initialization > Scanning for Servlets, Filters, and listeners",
+     "text": "When using an embedded container, automatic registration of classes annotated with @WebServlet , @WebFilter , and @WebListener can be enabled by using @ServletComponentScan . @ServletComponentScan has"
+    },
+    {
+     "heading": "Servlet Web Applications > Embedded Servlet Container Support > Servlet Context Initialization > Init Parameters",
+     "text": "Init parameters can be configured on the ServletContext using server.servlet.context-parameters.* properties. For example, the property server.servlet.context-parameters.com.example.parameter=example "
+    },
+    {
+     "heading": "Servlet Web Applications > Embedded Servlet Container Support > Servlet Context Initialization",
+     "text": "Embedded servlet containers do not directly execute the ServletContainerInitializer interface or Spring’s WebApplicationInitializer interface. This is an intentional design decision intended to reduce"
+    }
+   ]
+  },
+  {
+   "question": "How can I replace the default application banner shown at startup?",
+   "answer_key": "banner.txt",
+   "baseline_answer": "Create a `banner.txt` file in `src/main/resources/` (or anywhere on the classpath) — Spring Boot picks it up automatically and prints it instead of the default banner.\n\n**Basic file**\n\n```\n=================================\n  My Application ${application.version}\n=================================\n```\n\n**Supported placeholders**\n\n- `${application.version}` — from `MANIFEST.MF` (e.g.",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "Add a `banner.txt` file to your classpath, or set the `spring.banner.location` property to the location of such a file. If the file uses an encoding other than UTF-8, set `spring.banner.charset`.\n\nYou can also generate a banner programmatically with the `SpringApplication.setBanner(…)` method, implementing the `Banner` interface's `printBanner()` method.\n\n(To suppress the banner entirely, use `spring.main.banner-mode` with `off`.)",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "SpringApplication > Customizing the Banner",
+     "text": "You can also use the spring.main.banner-mode property to determine if the banner has to be printed on System.out ( console ), sent to the configured logger ( log ), or not produced at all ( off ). The"
+    },
+    {
+     "heading": "Properties and Configuration > Externalize the Configuration of SpringApplication",
+     "text": "A SpringApplication has bean property setters, so you can use its Java API as you create the application to modify its behavior. Alternatively, you can externalize the configuration by setting propert"
+    },
+    {
+     "heading": "SpringApplication > Customizing the Banner",
+     "text": "The banner that is printed on start up can be changed by adding a banner.txt file to your classpath or by setting the spring.banner.location property to the location of such a file. If the file has an"
+    }
+   ]
+  },
+  {
+   "question": "Which annotation is used to test only the web layer of an application?",
+   "answer_key": "@WebMvcTest",
+   "baseline_answer": "`@WebMvcTest` is used to test only the web layer (Spring MVC controllers) of a Spring Boot application.\n\nFor a WebFlux application, the equivalent is `@WebFluxTest`.",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "NOT_FOUND",
+   "rag_correct": false,
+   "rag_notfound": true,
+   "retrieved": [
+    {
+     "heading": "Testing Spring Boot Applications > Auto-configured Tests",
+     "text": "Spring Boot’s auto-configuration system works well for applications but can sometimes be a little too much for tests. It often helps to load only the parts of the configuration that are required to te"
+    },
+    {
+     "heading": "Testing Spring Boot Applications > Auto-configured Web Clients",
+     "text": "You can use the @WebClientTest annotation from the spring-boot-webclient-test module to test code that uses WebClient . By default, it auto-configures Jackson, GSON, and Jsonb support, and configures "
+    },
+    {
+     "heading": "Testing Spring Boot Applications > Testing With a Mock Environment",
+     "text": "Testing within a mocked environment is usually faster than running with a full servlet container. However, since mocking occurs at the Spring MVC layer, code that relies on lower-level servlet contain"
+    }
+   ]
+  },
+  {
+   "question": "How do I register a servlet filter programmatically?",
+   "answer_key": "FilterRegistrationBean",
+   "baseline_answer": "In Spring Boot you have three practical options.\n\n**1. Just declare it as a bean (simplest)**\n\nSpring Boot auto-registers any `Filter` bean in the servlet context and maps it to `/*`:\n\n```java\n@Configuration\npublic class FilterConfig {\n\n    @Bean\n    public Filter myFilter() {\n        return new MyFilter();\n    }\n}\n```\n\nDownside: you can't control the URL pattern or order this way.\n\n**2. `FilterRegistrationBean` (recommended when you need control)**\n\n```java\n@Configuration\npublic class FilterConfig {\n\n    @Bean\n    public FilterRegistrationBean<MyFilter> myFilterRegistration() {\n        FilterRegistrationBean<MyFilter> registration = new FilterRegistrationBean<>();\n        registration.setFilter(new MyFilter());\n        registration.addUrlPatterns(\"/api/*\");\n        registration.setOrder(Ordered.HIGHEST_PRECEDENCE); // lower value = earlier\n        registration.setName(\"myFilter\");\n        registration.setDispatcherTypes(DispatcherType.REQUEST, DispatcherType.ASYNC);\n        registration.addInitParameter(\"paramName\", \"paramValue\");\n        return registration;\n    }\n}\n```\n\nIf your filter is itself a bean, inject it instead of calling `new`:\n\n```java\n@Bean\npublic FilterRegistrationBean<MyFilter> myFilterRegistration(MyFilter filter) {\n    FilterRegistrationBean<MyFilter> registration = new FilterRegistrationBean<>(filter);\n    registration.add",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "Define a `FilterRegistrationBean` for the `Filter` (e.g., declaring it as a `@Bean`). Excerpt [1] states that if you cannot change the `Filter` class, \"you must define a `FilterRegistrationBean` for the `Filter` and set the registration bean's order using the `setOrder(int)` method.\" Excerpt [2] shows this pattern programmatically:\n\n```\n@Bean\npublic FilterRegistrationBean<MyFilter> registration(MyFilter filter) {\n    FilterRegistrationBean<MyFilter> registration = new FilterRegistrationBean<>(filter);\n    registration.setEnabled(false);\n    return registration;\n}\n```\n\nNote that excerpt [1] also mentions `@FilterRegistration` (with an `order` attribute) as an annotation-based alternative.",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Servlet Web Applications > Embedded Servlet Container Support > Servlets, Filters, and Listeners > Registering Servlets, Filters, and Listeners as Spring Beans",
+     "text": "It is usually safe to leave filter beans unordered. If a specific order is required, you should annotate the Filter with @Order or make it implement Ordered . You cannot configure the order of a Filte"
+    },
+    {
+     "heading": "Embedded Web Servers > Add a Servlet, Filter, or Listener to an Application > Add a Servlet, Filter, or Listener by Using a Spring Bean > Disable Registration of a Servlet or Filter",
+     "text": "As described earlier , any Servlet or Filter beans are registered with the servlet container automatically. To disable registration of a particular Filter or Servlet bean, create a registration bean f"
+    },
+    {
+     "heading": "Embedded Web Servers > Add a Servlet, Filter, or Listener to an Application",
+     "text": "In a servlet stack application, that is with the spring-boot-starter-web , there are two ways to add Servlet , Filter , ServletContextListener , and the other listeners supported by the Servlet API to"
+    }
+   ]
+  },
+  {
+   "question": "How do I enable HTTP response compression in the embedded server?",
+   "answer_key": "server.compression.enabled",
+   "baseline_answer": "",
+   "baseline_correct": false,
+   "baseline_notfound": false,
+   "rag_answer": "Enable HTTP response compression by setting the `server.compression.enabled=true` property (in `application.properties`), or the YAML equivalent:\n\n```yaml\nserver:\n  compression:\n    enabled: true\n```\n\nThis is supported by Jetty, Tomcat and Reactor Netty. By default, responses must be at least 2048 bytes long and have a content type among `text/html`, `text/xml`, `text/plain`, `text/css`, `text/javascript`, `application/javascript`, `application/json`, or `application/xml`. You can change these with `server.compression.min-response-size`, `server.compression.mime-types` (replaces defaults), or `server.compression.additional-mime-types` (adds to defaults).",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Embedded Web Servers > Enable HTTP Response Compression",
+     "text": "HTTP response compression is supported by Jetty, Tomcat and Reactor Netty. It can be enabled in application.properties , as follows: [code] server.compression.enabled=true [code] server:  compression:"
+    },
+    {
+     "heading": "Reactive Web Applications > Embedded Reactive Server Support > Customizing Reactive Servers",
+     "text": "Common reactive web server settings can be configured by using Spring Environment properties. Usually, you would define the properties in your application.properties or application.yaml file. Common s"
+    },
+    {
+     "heading": "Embedded Web Servers > Configure HTTP/2",
+     "text": "You can enable HTTP/2 support in your Spring Boot application with the server.http2.enabled configuration property. Both h2 (HTTP/2 over TLS) and h2c (HTTP/2 over TCP) are supported. To use h2 , SSL m"
+    }
+   ]
+  },
+  {
+   "question": "How do I configure which Actuator endpoints are exposed over HTTP?",
+   "answer_key": "management.endpoints.web.exposure.include",
+   "baseline_answer": "Use the `management.endpoints.web.exposure.*` properties.\n\n```properties\n# Expose only these two over HTTP\nmanagement.endpoints.web.exposure.include=health,info\n\n# Expose everything\nmanagement.endpoints.web.exposure.include=*\n\n# Exclude specific ones (takes precedence over include)\nmanagement.endpoints.web.exposure.exclude=threaddump,heapdump\n```\n\nKey points:\n\n- **Default behavior**: with no web dependency on JMX, only `health` is exposed over HTTP. Setting `include` replaces that default set, so you must list `health` explicitly if you still want it.\n- **`exclude` wins**: if an endpoint appears in both lists, it is not exposed.\n- **JMX is separate**: these properties only affect HTTP. For JMX use `management.endpoints.jmx.exposure.include` / `.exclude`. `include=*` on web only applies to web.\n- **Exposure vs. enabled**: exposing an endpoint doesn't guarantee it's available — the endpoint must also be enabled. Use `management.endpoint.<id>.enabled=true",
+   "baseline_correct": true,
+   "baseline_notfound": false,
+   "rag_answer": "Use the `management.endpoints.web.exposure.include` property to configure the endpoints that are exposed over HTTP. (Note: for security purposes, only the `/health` endpoint is exposed over HTTP by default.)",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Endpoints > Security",
+     "text": "For security purposes, only the /health endpoint is exposed over HTTP by default. You can use the management.endpoints.web.exposure.include property to configure the endpoints that are exposed. Before"
+    },
+    {
+     "heading": "Monitoring and Management Over HTTP",
+     "text": "If you are developing a web application, Spring Boot Actuator auto-configures all enabled endpoints to be exposed over HTTP. The default convention is to use the id of the endpoint with a prefix of /a"
+    },
+    {
+     "heading": "Endpoints > Kubernetes Probes",
+     "text": "Applications deployed on Kubernetes can provide information about their internal state with Container Probes . Depending on your Kubernetes configuration , the kubelet calls those probes and reacts to"
+    }
+   ]
+  },
+  {
+   "question": "How do I customize the naming strategy used by Hibernate?",
+   "answer_key": "naming.physical-strategy",
+   "baseline_answer": "",
+   "baseline_correct": false,
+   "baseline_notfound": false,
+   "rag_answer": "Set the `spring.jpa.hibernate.naming.physical-strategy` and `spring.jpa.hibernate.naming.implicit-strategy` properties. Alternatively, if `ImplicitNamingStrategy` or `PhysicalNamingStrategy` beans are available in the application context, Hibernate will be automatically configured to use them. You can also define a custom `CamelCaseToUnderscoresNamingStrategy` bean, or configure a bean such as `PhysicalNamingStrategyStandardImpl`.",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Data Access > Configure Hibernate Naming Strategy",
+     "text": "Hibernate uses two different naming strategies to map names from the object model to the corresponding database names. The fully qualified class name of the physical and the implicit strategy implemen"
+    },
+    {
+     "heading": "Data Access > Configure Hibernate Naming Strategy",
+     "text": "[code] spring:  jpa:  hibernate:  naming:  physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl Alternatively, you can configure the following bean: [code] import org."
+    },
+    {
+     "heading": "Data Access > Configure Hibernate Naming Strategy",
+     "text": "[code] import org.hibernate.boot.model.naming.Identifier; import org.hibernate.boot.model.naming.PhysicalNamingStrategySnakeCaseImpl; import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment; import o"
+    }
+   ]
+  },
+  {
+   "question": "How do I enable HTTP/2 on the embedded Tomcat server?",
+   "answer_key": "server.http2.enabled",
+   "baseline_answer": "",
+   "baseline_correct": false,
+   "baseline_notfound": false,
+   "rag_answer": "NOT_FOUND",
+   "rag_correct": false,
+   "rag_notfound": true,
+   "retrieved": [
+    {
+     "heading": "Embedded Web Servers > Enable Tomcat’s MBean Registry",
+     "text": "Embedded Tomcat’s MBean registry is disabled by default. This minimizes Tomcat’s memory footprint. If you want to use Tomcat’s MBeans, for example so that they can be used by Micrometer to expose metr"
+    },
+    {
+     "heading": "Embedded Web Servers > Enable HTTP Response Compression",
+     "text": "HTTP response compression is supported by Jetty, Tomcat and Reactor Netty. It can be enabled in application.properties , as follows: [code] server.compression.enabled=true [code] server:  compression:"
+    },
+    {
+     "heading": "Embedded Web Servers > Enable Multiple Connectors > Multiple Connectors with Tomcat",
+     "text": "You can add an Connector to the TomcatServletWebServerFactory , which can allow multiple connectors, including HTTP and HTTPS connectors, as shown in the following example: [code] import org.apache.ca"
+    }
+   ]
+  },
+  {
+   "question": "How do I use Testcontainers in a Spring Boot integration test?",
+   "answer_key": "@Testcontainers",
+   "baseline_answer": "",
+   "baseline_correct": false,
+   "baseline_notfound": false,
+   "rag_answer": "Use `@Testcontainers` and `@SpringBootTest` on the test class, and annotate a container field with `@Container` (from `org.testcontainers.junit.jupiter.Container`) and `@ServiceConnection` (from `org.springframework.boot.testcontainers.service.connection.ServiceConnection`). The `@ServiceConnection` annotation creates connection details automatically for the service running in the container, taking precedence over connection-related configuration properties.\n\nExample from the excerpts:\n\n```java\n@Testcontainers\n@SpringBootTest\nclass MyIntegrationTests {\n\n  @Container\n  @ServiceConnection\n  static Neo4jContainer neo4j = new Neo4jContainer(\"neo4j:5\");\n\n  @Test\n  void myTest() {\n    ...\n  }\n}\n```",
+   "rag_correct": true,
+   "rag_notfound": false,
+   "retrieved": [
+    {
+     "heading": "Testcontainers",
+     "text": "The Testcontainers library provides a way to manage services running inside Docker containers. It integrates with JUnit, allowing you to write a test class that can start up a container before any of "
+    },
+    {
+     "heading": "Development-time Services > Testcontainers Support",
+     "text": "As well as using Testcontainers for integration testing , it’s also possible to use them at development time. The next sections will provide more details about that."
+    },
+    {
+     "heading": "Testcontainers > Service Connections",
+     "text": "A service connection is a connection to any remote service. Spring Boot’s auto-configuration can consume the details of a service connection and use them to establish a connection to a remote service."
+    }
+   ]
+  }
+ ]
+}

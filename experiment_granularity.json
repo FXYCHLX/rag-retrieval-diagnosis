@@ -1,0 +1,134 @@
+{
+ "294字": {
+  "n_chunks": 4338,
+  "avg_len": 294,
+  "BM25": {
+   "recall@1": 0.3333,
+   "recall@3": 0.4762,
+   "recall@5": 0.5238,
+   "mrr": 0.4008
+  },
+  "TFIDF+LSA": {
+   "recall@1": 0.3333,
+   "recall@3": 0.4286,
+   "recall@5": 0.5714,
+   "mrr": 0.3984
+  },
+  "Hybrid+Rerank": {
+   "recall@1": 0.381,
+   "recall@3": 0.4762,
+   "recall@5": 0.5714,
+   "mrr": 0.4365
+  }
+ },
+ "391字": {
+  "n_chunks": 3133,
+  "avg_len": 391,
+  "BM25": {
+   "recall@1": 0.2857,
+   "recall@3": 0.5238,
+   "recall@5": 0.5714,
+   "mrr": 0.3825
+  },
+  "TFIDF+LSA": {
+   "recall@1": 0.2857,
+   "recall@3": 0.5238,
+   "recall@5": 0.619,
+   "mrr": 0.4
+  },
+  "Hybrid+Rerank": {
+   "recall@1": 0.2857,
+   "recall@3": 0.5238,
+   "recall@5": 0.5238,
+   "mrr": 0.3889
+  }
+ },
+ "486字": {
+  "n_chunks": 2513,
+  "avg_len": 486,
+  "BM25": {
+   "recall@1": 0.2857,
+   "recall@3": 0.5714,
+   "recall@5": 0.5714,
+   "mrr": 0.4127
+  },
+  "TFIDF+LSA": {
+   "recall@1": 0.2381,
+   "recall@3": 0.4762,
+   "recall@5": 0.619,
+   "mrr": 0.3825
+  },
+  "Hybrid+Rerank": {
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.619,
+   "mrr": 0.4857
+  }
+ },
+ "609字": {
+  "n_chunks": 1967,
+  "avg_len": 609,
+  "BM25": {
+   "recall@1": 0.3333,
+   "recall@3": 0.5714,
+   "recall@5": 0.7143,
+   "mrr": 0.4675
+  },
+  "TFIDF+LSA": {
+   "recall@1": 0.4762,
+   "recall@3": 0.6667,
+   "recall@5": 0.7143,
+   "mrr": 0.573
+  },
+  "Hybrid+Rerank": {
+   "recall@1": 0.381,
+   "recall@3": 0.619,
+   "recall@5": 0.7619,
+   "mrr": 0.5198
+  }
+ },
+ "766字": {
+  "n_chunks": 1564,
+  "avg_len": 766,
+  "BM25": {
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.7619,
+   "mrr": 0.4952
+  },
+  "TFIDF+LSA": {
+   "recall@1": 0.4286,
+   "recall@3": 0.6667,
+   "recall@5": 0.6667,
+   "mrr": 0.5159
+  },
+  "Hybrid+Rerank": {
+   "recall@1": 0.4286,
+   "recall@3": 0.5714,
+   "recall@5": 0.6667,
+   "mrr": 0.5135
+  }
+ },
+ "931字": {
+  "n_chunks": 1281,
+  "avg_len": 931,
+  "BM25": {
+   "recall@1": 0.4762,
+   "recall@3": 0.7143,
+   "recall@5": 0.8095,
+   "mrr": 0.577
+  },
+  "TFIDF+LSA": {
+   "recall@1": 0.381,
+   "recall@3": 0.5714,
+   "recall@5": 0.6667,
+   "mrr": 0.4841
+  },
+  "Hybrid+Rerank": {
+   "recall@1": 0.4762,
+   "recall@3": 0.5238,
+   "recall@5": 0.7619,
+   "mrr": 0.5468
+  }
+ }
+}

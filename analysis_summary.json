@@ -1,0 +1,317 @@
+{
+ "baseline_correct": 16,
+ "n": 21,
+ "variants": [
+  {
+   "name": "原始 RAG（top3+严格）",
+   "file": "experiment_generation.json",
+   "top_k": 3,
+   "prompt_mode": "strict",
+   "ceiling": 0.7143,
+   "overall": 0.6667,
+   "hit_ok": 14,
+   "hit_n": 15,
+   "miss_ok": 0,
+   "miss_n": 6,
+   "notfound": 0.2381,
+   "own_knowledge": 0
+  },
+  {
+   "name": "V1（top5+严格）",
+   "file": "experiment_v_topk5.json",
+   "top_k": 5,
+   "prompt_mode": "strict",
+   "ceiling": 0.8095,
+   "overall": 0.8095,
+   "hit_ok": 17,
+   "hit_n": 17,
+   "miss_ok": 0,
+   "miss_n": 4,
+   "notfound": 0.1905,
+   "own_knowledge": 0.0
+  },
+  {
+   "name": "V2（top3+放宽）",
+   "file": "experiment_v_loose.json",
+   "top_k": 3,
+   "prompt_mode": "loose",
+   "ceiling": 0.7143,
+   "overall": 0.8095,
+   "hit_ok": 12,
+   "hit_n": 15,
+   "miss_ok": 5,
+   "miss_n": 6,
+   "notfound": 0.0,
+   "own_knowledge": 0.2381
+  },
+  {
+   "name": "V3（top5+放宽）",
+   "file": "experiment_v_combo.json",
+   "top_k": 5,
+   "prompt_mode": "loose",
+   "ceiling": 0.8095,
+   "overall": 0.7143,
+   "hit_ok": 13,
+   "hit_n": 17,
+   "miss_ok": 2,
+   "miss_n": 4,
+   "notfound": 0.0,
+   "own_knowledge": 0.0952
+  }
+ ],
+ "baseline_layers": {
+  "top3": {
+   "hit_ok": 11,
+   "hit_n": 15,
+   "miss_ok": 5,
+   "miss_n": 6
+  },
+  "top5": {
+   "hit_ok": 13,
+   "hit_n": 17,
+   "miss_ok": 3,
+   "miss_n": 4
+  }
+ },
+ "v2_own": {
+  "n": 5,
+  "ok": 5
+ },
+ "v2_no_own": {
+  "n": 16,
+  "ok": 12
+ },
+ "per_question": [
+  {
+   "question": "How can I change the HTTP port the embedded server listens on?",
+   "answer_key": "server.port",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "Which annotation marks the main class of a Spring Boot application?",
+   "answer_key": "@SpringBootApplication",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "How do I exclude a specific auto-configuration class from being applied?",
+   "answer_key": "spring.autoconfigure.exclude",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "How do I change the logging level of a single logger?",
+   "answer_key": "logging.level",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "Which property sets the name of the application used in metrics and logs?",
+   "answer_key": "spring.application.name",
+   "baseline": true,
+   "rag": [
+    false,
+    false,
+    true,
+    false
+   ]
+  },
+  {
+   "question": "How do I activate a configuration profile?",
+   "answer_key": "spring.profiles.active",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    false,
+    false
+   ]
+  },
+  {
+   "question": "How do I enable detailed health information in the Actuator health endpoint?",
+   "answer_key": "management.endpoint.health.show-details",
+   "baseline": true,
+   "rag": [
+    false,
+    true,
+    false,
+    true
+   ]
+  },
+  {
+   "question": "Which Actuator endpoint exposes application metrics?",
+   "answer_key": "/actuator/metrics",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "How do I configure the JDBC connection URL for the default data source?",
+   "answer_key": "spring.datasource.url",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "How do I set the maximum pool size of the default HikariCP connection pool?",
+   "answer_key": "maximum-pool-size",
+   "baseline": true,
+   "rag": [
+    false,
+    false,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "Which annotation registers a bean only when a property has a given value?",
+   "answer_key": "@ConditionalOnProperty",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "How do I enable graceful shutdown of the web server?",
+   "answer_key": "server.shutdown",
+   "baseline": false,
+   "rag": [
+    false,
+    true,
+    false,
+    true
+   ]
+  },
+  {
+   "question": "How do I change the context path of the embedded servlet container?",
+   "answer_key": "server.servlet.context-path",
+   "baseline": true,
+   "rag": [
+    false,
+    false,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "How can I replace the default application banner shown at startup?",
+   "answer_key": "banner.txt",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "Which annotation is used to test only the web layer of an application?",
+   "answer_key": "@WebMvcTest",
+   "baseline": true,
+   "rag": [
+    false,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "How do I register a servlet filter programmatically?",
+   "answer_key": "FilterRegistrationBean",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    false
+   ]
+  },
+  {
+   "question": "How do I enable HTTP response compression in the embedded server?",
+   "answer_key": "server.compression.enabled",
+   "baseline": false,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "How do I configure which Actuator endpoints are exposed over HTTP?",
+   "answer_key": "management.endpoints.web.exposure.include",
+   "baseline": true,
+   "rag": [
+    true,
+    true,
+    true,
+    true
+   ]
+  },
+  {
+   "question": "How do I customize the naming strategy used by Hibernate?",
+   "answer_key": "naming.physical-strategy",
+   "baseline": false,
+   "rag": [
+    true,
+    true,
+    false,
+    false
+   ]
+  },
+  {
+   "question": "How do I enable HTTP/2 on the embedded Tomcat server?",
+   "answer_key": "server.http2.enabled",
+   "baseline": false,
+   "rag": [
+    false,
+    false,
+    true,
+    false
+   ]
+  },
+  {
+   "question": "How do I use Testcontainers in a Spring Boot integration test?",
+   "answer_key": "@Testcontainers",
+   "baseline": false,
+   "rag": [
+    true,
+    true,
+    true,
+    false
+   ]
+  }
+ ]
+}

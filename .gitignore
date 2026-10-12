@@ -1,0 +1,28 @@
+# 密钥 —— 绝对不要提交
+.env
+*.key
+
+# 虚拟环境
+venv/
+.venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# 抓取的原始语料（体积大，跑 crawl_docs.py / crawl_howto.py 自行生成）
+corpus/
+
+# 生成物
+figures/
+*.docx
+*.pdf
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

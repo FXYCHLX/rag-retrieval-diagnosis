@@ -1,0 +1,12 @@
+# 统一换行，避免 Windows / Linux 之间产生无意义的 diff
+* text=auto eol=lf
+
+# 二进制文件不做换行转换
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.pdf  binary
+*.docx binary
+
+# 切片数据：让 GitHub 按数据而非代码统计
+*.jsonl linguist-language=JSON
